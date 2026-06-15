@@ -90,15 +90,19 @@ public class GroupingBy {
 		
 		// To group employee based on their dept
 		System.out.println("hello");
-		System.out.println(empList.stream().collect(Collectors.groupingBy(Employee4::getDept,Collectors.mapping(Employee4::getName, Collectors.toList()))));
+		System.out.println(empList.stream().collect(Collectors.groupingBy(Employee4::getDept)));
+		System.out.println(empList.stream().collect(Collectors.groupingBy(Employee4::getDept,
+				Collectors.mapping(Employee4::getName, Collectors.toList()))));
+
 		
 		// to convert names to uppercase
 		
 		System.out.println(empList.stream().map(emp->emp.getName().toUpperCase()).collect(Collectors.toList()));
 		
 		// To get the highest salary among all emp
+		System.out.println("max salary");
 		System.out.println(empList.stream().max(Comparator.comparingDouble(Employee4::getSalary)));
-		System.out.println(empList.stream().max((e1,e2)->Double.compare(e1.getSalary(),  e2.getSalary())));
+		System.out.println(empList.stream().max((e1,e2)->Double.compare(e1.getSalary(),  e2.getSalary())).map(emp->emp.getSalary()).orElse(0D));
 		
 		// to get emp with yoe > 7
 		
@@ -109,10 +113,19 @@ public class GroupingBy {
 		System.out.println(empList.stream().collect(Collectors.groupingBy(Employee4::getDept, Collectors.counting())));
 		
 		// IMPORTANT: To get the highest salary among all emp in each dept
-		System.out.println(empList.stream().collect(Collectors.groupingBy(Employee4::getDept, Collectors.maxBy((e1,e2)->Double.compare(e1.getSalary(),  e2.getSalary())))));
+		System.out.println(empList.stream().collect(Collectors.groupingBy(
+				Employee4::getDept, Collectors.maxBy((e1,e2)->Double.compare(e1.getSalary(),  e2.getSalary())))));
+		
+		
 		//Operer tate toh optional of employee pabi jodi bole toh give me the names only then eta korte parish
-		Map<String, Optional<Employee4>> collect = empList.stream().collect(Collectors.groupingBy(Employee4::getDept, Collectors.maxBy((e1,e2)->Double.compare(((Employee4) e1).getSalary(),  ((Employee4) e2).getSalary()))));
+		
+		Map<String, Optional<Employee4>> collect = empList.stream().collect(Collectors.groupingBy(Employee4::getDept, 
+				Collectors.maxBy(Comparator.comparingDouble(Employee4::getSalary))));
+		
+		
 		Map<String, String> collect2 = collect.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry-> entry.getValue().map(Employee4::getName).orElse("No employee found")));
+		
+		System.out.println(collect2);
 		// Or shortcut hoche
 		Map<String, String> highestPaidEmployeeByDept = empList.stream()
 			    .collect(Collectors.groupingBy(Employee4::getDept,
@@ -130,8 +143,7 @@ public class GroupingBy {
 		// 2-7=> Mid 
 		// >= 8 > senior
 		
-		
-		System.out.println(empList.stream().collect(Collectors.groupingBy(emp -> {
+		Map<String, List<String>> collect3 = empList.stream().collect(Collectors.groupingBy(emp -> {
 			if (emp.getYoe()<=2)
 				return "junior";
 			else if(emp.getYoe()>2 && emp.getYoe()<=7)
@@ -139,7 +151,27 @@ public class GroupingBy {
 			else
 				return "senior";
 		},Collectors.mapping(Employee4::getName, Collectors.toList())
-		)));
+		));
+		// Jodi eta na ditam Collectors.mapping(Employee4::getName, Collectors.toList()) then list of emp4 ashto
+		System.out.println(collect3);
+		
+		List<Integer> numbers = Arrays.asList(1 ,2 ,3 ,4, 5, 6,7,8,9);
+		
+		// Group the above list into even and odd
+		
+		/*Map<String, List<Integer>> groupedNumbers = numbers.stream()
+	            .collect(Collectors.groupingBy(
+	                num -> (num % 2 == 0) ? "even" : "odd", Collectors.mapping(Integer::new, Collectors.toList())
+	            ));*/
+		
+		// OR simply 
+		Map<String, List<Integer>> groupedNumbers = numbers.stream()
+	            .collect(Collectors.groupingBy(
+	                num -> (num % 2 == 0) ? "even" : "odd"
+	            ));
+		System.out.println(groupedNumbers);
+		
+		
 	}
 
 }
