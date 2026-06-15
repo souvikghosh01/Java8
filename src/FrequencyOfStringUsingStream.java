@@ -35,7 +35,7 @@ public class FrequencyOfStringUsingStream {
 			   											 .collect(Collectors.groupingBy(ch->ch, 
 			   													 						LinkedHashMap::new, 
 			   													 							Collectors.counting()));
-	   System.out.println(linkedHashMap);
+	   System.out.println("Print frequencies of characters in a string in the order of their occurrence." + linkedHashMap);
 		
 	   //3. Print characters frequency in alphabetic order. 
 	   TreeMap<Character, Long> treeHashMap = Stream.of(input.toLowerCase().split(""))
@@ -49,11 +49,16 @@ public class FrequencyOfStringUsingStream {
 	 //Suppose we have a existing hashMap then Sort it by key. LinkedHashMap last ae karon jate oi sorted order ta preserved 
 	 //thake karon  notun ashmap ae jokhon store korbe tokhon sorted order ta jate ghete na jaye taai LinkedHashMap
 	   Map<String, Long> sorted = map.entrySet().stream()
-			   						 .sorted(Map.Entry.comparingByKey()) // this will return the sorted stream
+			   						 .sorted(Map.Entry.comparingByValue()) // this will return the sorted stream
 			   						 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
 													LinkedHashMap::new));
-	   System.out.println("Sorted by key" + sorted);
+	   System.out.println("Sorted by value" + sorted);
 	   
+	   Map<String, Long> sorted1 = map.entrySet().stream()
+					 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
+								TreeMap::new));
+	   
+	   System.out.println("Sorted by key new" + sorted1);
 	   
 	   // 4. Print characters frequency in the order of most frequent one to least frequent one.Sort by value. 
 	   // Tar maneh just like 1 frequency ta ke map ae store kore final map ta ke sort korte lagbe as per value	   

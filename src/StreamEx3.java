@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
+//import java.util.stream.Stream;
 
 
 public class StreamEx3 {
@@ -90,8 +90,7 @@ public class StreamEx3 {
 		
 		Map<String, Long> stringFreq = Stream.of(str.split("")).collect(Collectors.groupingBy(temp -> temp, Collectors.counting()));
 		System.out.println(stringFreq);
-		Map<Character, Long> charFreq = str.chars().mapToObj(ch-> (char)ch).collect(
-										Collectors.groupingBy(temp -> temp, Collectors.counting()));
+		Map<Character, Long> charFreq =  Stream.of(str.split("")).map(tempStr -> tempStr.charAt(0)).collect(Collectors.groupingBy(temp -> temp, Collectors.counting()));
 		System.out.println(charFreq);
 	}
 
